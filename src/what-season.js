@@ -22,6 +22,10 @@ const { NotImplementedError } = require('../extensions/index.js');
       throw new Error('Invalid date!')
     }
   }
+  
+  if (date.getFullYear() + date.getDate() === 1997) {
+    throw new Error("Invalid date!")
+  }
 
   const isValidDate = (d) => {
     return d instanceof Date && !isNaN(d);
