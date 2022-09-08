@@ -12,31 +12,44 @@ const { NotImplementedError } = require('../extensions/index.js');
  * 
  */
  function getSeason(date) {
+  
+  if (date === undefined) return "Unable to determine the time of year!";
 
-  console.log(date)
-
-  const isValidDate = (d) => {
-    return d instanceof Date && !isNaN(d.valueOf()); //TODO: dont understand the tricky shit 
+  try {
+    date.getDate();
+  } catch (e) {
+    if (e.name === 'TypeError') {
+      throw new Error('Invalid date!')
+    }
   }
 
-  let season = '';
-  if (date === undefined) return "Unable to determine the time of year!";
+  const isValidDate = (d) => {
+    return d instanceof Date && !isNaN(d);
+  };
+
+ 
+  let season = "";
   if (!isValidDate(date)) throw new Error("Invalid date!");
+
   const springStart = new Date(date.getFullYear(), 2, 1);
   const summerStart = new Date(date.getFullYear(), 5, 1);
   const autumnStart = new Date(date.getFullYear(), 8, 1);
   const winterStart = new Date(date.getFullYear(), 11, 1);
+  const dec31 = new Date(date.getFullYear(), 11, 31);
+  const jan1 = new Date(date.getFullYear(), 0, 1);
+  const feb28 = new Date(date.getFullYear(), 1, 28);
+
 
   if (date >= springStart && date < summerStart) {
-    season = 'spring';
+    season = "spring";
   } else if (date >= summerStart && date < autumnStart) {
-    season = 'summer';
+    season = "summer";
   } else if (date >= autumnStart && date < winterStart) {
-    season = 'autumn';
-  } else if (date >= winterStart && date < springStart) {
-    season = 'winter';
+    season = "autumn";
+  } else if ((date >= winterStart && date <= dec31) || (date >= jan1 && date <= feb28)) {
+    season = "winter";
   } else {
-    return 'winter';
+    season = "winter";
   }
   return season;
 }
